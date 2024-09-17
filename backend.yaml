@@ -6,6 +6,12 @@
     login_host: mysql.avk07.online
   
   tasks:
+  - name: ansible to install PyMySQL
+    ansible.builtin.pip: # this is ansible pip module
+      name:
+      - PyMySQL
+      executable: pip3.9
+      
   - name: Disable default nodejs
     ansible.builtin.command: dnf module disable nodejs -y
 
@@ -55,7 +61,7 @@
       target: /app/schema/backend.sql
       name: all
       state: dump
-      
+
 
 
 
