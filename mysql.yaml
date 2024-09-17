@@ -6,6 +6,12 @@
     login_host: mysql.avk07.online
   
   tasks:
+  - name: ansible to install PyMySQL
+    ansible.builtin.pip: # this is ansible pip module
+      name:
+      - PyMySQL
+      executable: pip3.9
+
   - name: Install MySQL Server
     ansible.builtin.package:
       name: mysql-server
@@ -22,6 +28,7 @@
       login_user: root
       login_password: "{{mysql_root_password}}"
       login_host: "{{login_host}}"
+      # ignore_errors: true
     register: mysql_info
 
   - name: print mysql info
