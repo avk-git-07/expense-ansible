@@ -1,6 +1,9 @@
 - name: Configure Backend Server
   hosts: backend
   become: yes
+  vars:
+    mysql_root_password: ExpenseApp@1
+    login_host: mysql.avk07.online
   
   tasks:
   - name: Disable default nodejs
@@ -34,9 +37,26 @@
       dest: /app
       remote_src: yes
 
-  # - name: Install dependencies npm build tool
-  #   ansible.builtin.command: npm install
-  #   args:
-  #     chdir: /app
+  - name: Install dependencies npm build tool
+    ansible.builtin.command: npm install
+    args:
+      chdir: /app
+
+  - name: Copy backend service
+    ansible.builtin.copy:
+      src: backend.service
+      dest: /etc/systemd/system/backend.service
+
+  - name: Import mysql data
+    community.mysql.mysql_db:
+      login_user: root
+      login_password: "{{mysql_root_password}}"
+      login_host: "{{login_host}}"
+      target: /app/schema/backend.sql
+      name: all
+      state: dump
+      
+
+
 
   
